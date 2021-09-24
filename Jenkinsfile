@@ -44,6 +44,25 @@ pipeline {
             }
         }
         
+        stage('Deploy') {
+            steps {
+                // build docker image
+                bat "docker build . -t [userdockerhub]/msc:${DOCKER_TAG}"
+                
+                // docker push
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]){
+                    bat "docker login -u [username] -p ${dockerHubPwd}"
+                    bat "docker push [address docker]:${DOCKER_TAG}"
+                }
+                
+                // deploy to kubernetes k8s
+                steps {
+                    sh "chmod +x changeTag.sh"
+                    sh "./changeTag.sh ${DOCKER_TAG}"
+                }
+            }
+        }
+        
         stage('Deliver') {
             steps {
                 // Deliver the codes using docker to run a virtual environment of the Application.
