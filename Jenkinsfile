@@ -47,12 +47,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-                sh "docker build . -t [userdockerhub]/msc:${DOCKER_TAG}"
+                sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
                 
                 // docker push
                 withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]){
-                    sh "docker login -u [username] -p ${dockerHubPwd}"
-                    sh "docker push [address docker]:${DOCKER_TAG}"
+                    sh "docker login -u jsuryadharma -p ${dockerHubPwd}"
+                    sh "docker push jsuryadharma:${DOCKER_TAG}"
                 }
                 
                 // deploy to kubernetes k8s
