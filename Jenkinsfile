@@ -11,18 +11,18 @@ pipeline {
         maven "M3"
     }
 
-    stages {    
+    stages {
         stage('Build') {
             steps {
                 git branch: 'main', url: 'https://github.com/qinglinggg/MySurveyCompanion.git'
                 // clean the target forder, so only the newer components + artifacts will be released.
-                bat "mvn clean compile"
+                sh "mvn clean compile"
             }
         }
         
         stage('Test') { 
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
             }
             post {
                 always {
@@ -34,7 +34,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                bat 'mvn package'
+                sh 'mvn package'
             }
             post {
                 success {
@@ -47,12 +47,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-                bat "docker build . -t [userdockerhub]/msc:${DOCKER_TAG}"
+                sh "docker build . -t [userdockerhub]/msc:${DOCKER_TAG}"
                 
                 // docker push
                 withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]){
-                    bat "docker login -u [username] -p ${dockerHubPwd}"
-                    bat "docker push [address docker]:${DOCKER_TAG}"
+                    sh "docker login -u [username] -p ${dockerHubPwd}"
+                    sh "docker push [address docker]:${DOCKER_TAG}"
                 }
                 
                 // deploy to kubernetes k8s
@@ -66,7 +66,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 // Deliver the codes using docker to run a virtual environment of the Application.
-                bat './jenkins/scripts/deliver.sh'
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
