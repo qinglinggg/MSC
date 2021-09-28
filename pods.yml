@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-image-upload
+  labels:
+    app: aws-image-upload
+spec:
+  containers:
+    - name: aws-image-upload
+      image: jsuryadharma/aws-image-upload:tagVersion
+      ports:
+        - containerPort: 8080
