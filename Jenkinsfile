@@ -59,6 +59,16 @@ pipeline {
                 steps {
                     sh "chmod +x changeTag.sh"
                     sh "./changeTag.sh ${DOCKER_TAG}"
+                    sshagent(['k8s-test']){
+                        sh "scp -i StrictHostKeyChecking=no services.yml aws-image-upload-pods.yml k8s-docker-demo-for-josur@34.133.165.254"
+                        script{
+                            try{
+                                sh "ssh kubectl apply -f ."
+                            } catch(error) {
+                                sh "ssh kubectl create -f ."
+                            }
+                        }
+                    }
                 }
             }
         }
