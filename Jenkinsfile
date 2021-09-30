@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/qinglinggg/MySurveyCompanion.git'
+                git branch: 'main', url: 'https://github.com/qinglinggg/MSC.git'
                 // clean the target forder, so only the newer components + artifacts will be released.
                 sh "mvn clean compile"
             }
