@@ -1,11 +1,5 @@
 pipeline {
     agent any
-//     agent {
-//         docker {
-//             image 'maven:3.8.1-adoptopenjdk-11' 
-//             args '-v /root/.m2:/root/.m2' 
-//         }
-//     }
     
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
@@ -55,8 +49,10 @@ pipeline {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
-                    sh "chmod +x changeTag.sh"
-                    sh "./changeTag.sh version-${currentBuild.number}"
+                
+                sh "chmod +x changeTag.sh"
+                sh "./changeTag.sh version-${currentBuild.number}"
+                
                 script{
                     try{
                         // Creating pods and services for Kubernetes, if there are changes then apply it.
@@ -70,8 +66,6 @@ pipeline {
         
         stage('Check Builds') {
             steps {
-                // Deliver the codes using docker to run a virtual environment of the Application.
-//                 sh './jenkins/scripts/deliver.sh'
                 echo "current build number: ${currentBuild.number}"
                 echo "previous build number: ${currentBuild.previousBuild.getNumber()}"
             }
