@@ -57,25 +57,21 @@ pipeline {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                     sh "docker push ${USERNAME}/msc:${DOCKER_TAG}"
                 }
-                // [string(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPwd')]
-                // deploy to kubernetes k8s
-                steps {
                     sh "chmod +x changeTag.sh"
                     sh "./changeTag.sh ${DOCKER_TAG}"
-                    script{
-                            try{
-                                // TODO: this
-                                sh "kubectl apply -f ."
-                            } catch(error) {
-                                // TODO: this
-                                sh "kubectl create -f ."
-                            }
-                        }
+                script{
+                    try{
+                        // TODO: this
+                        sh "kubectl apply -f ."
+                        } catch(error) {
+                        // TODO: this
+                        sh "kubectl create -f ."
+                    }
+                }
 //                     sshagent(['k8s-test']){
                         // TODO" this
 //                         sh "scp -i StrictHostKeyChecking=no services.yml aws-image-upload-pods.yml k8s-docker-demo-for-josur@34.133.165.254"
 //                     }
-                }
             }
         }
         
