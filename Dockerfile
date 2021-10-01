@@ -1,6 +1,4 @@
 FROM node:16-alpine3.11
-
-
 FROM openjdk:11
 
 WORKDIR /app
