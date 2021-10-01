@@ -54,8 +54,8 @@ pipeline {
                 
                 // docker push
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-                    sh "docker login -u jsuryadharma -p ${dockerHubPwd}"
-                    sh "docker push jsuryadharma:${DOCKER_TAG}"
+                    sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                    sh "docker push ${USERNAME}:${DOCKER_TAG}"
                 }
                 // [string(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPwd')]
                 // deploy to kubernetes k8s
