@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-                sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
+//                 sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
                 
                 // docker push
 //                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
