@@ -53,10 +53,10 @@ pipeline {
                 sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
                 
                 // docker push
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-                    sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                    sh "docker push ${USERNAME}/msc:${DOCKER_TAG}"
-                }
+//                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+//                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+//                     sh "docker push ${USERNAME}/msc:${DOCKER_TAG}"
+//                 }
                     sh "chmod +x changeTag.sh"
                     sh "./changeTag.sh ${DOCKER_TAG}"
                 script{
@@ -78,7 +78,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 // Deliver the codes using docker to run a virtual environment of the Application.
-                sh './jenkins/scripts/deliver.sh'
+//                 sh './jenkins/scripts/deliver.sh'
             }
         }
     }
