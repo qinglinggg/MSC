@@ -6,9 +6,7 @@ pipeline {
 //             args '-v /root/.m2:/root/.m2' 
 //         }
 //     }
-    environment {
-        DOCKER_TAG = getDockerTag()
-    }
+    
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "M3"
@@ -50,15 +48,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-//                 sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
+//                 sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
                 
                 // docker push
 //                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 //                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-//                     sh "docker push ${USERNAME}/msc:${DOCKER_TAG}"
+//                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
 //                 }
                     sh "chmod +x changeTag.sh"
-                    sh "./changeTag.sh ${DOCKER_TAG}"
+                    sh "./changeTag.sh version-${currentBuild.number}"
                 script{
                     try{
                         // TODO: this
@@ -68,10 +66,6 @@ pipeline {
                         sh "kubectl create -f ."
                     }
                 }
-//                     sshagent(['k8s-test']){
-                        // TODO" this
-//                         sh "scp -i StrictHostKeyChecking=no services.yml aws-image-upload-pods.yml k8s-docker-demo-for-josur@34.133.165.254"
-//                     }
             }
         }
         
@@ -84,10 +78,4 @@ pipeline {
             }
         }
     }
-}
-
-
-def getDockerTag(){
-    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
-    return tag
 }
