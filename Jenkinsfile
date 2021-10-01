@@ -6,6 +6,9 @@ pipeline {
 //             args '-v /root/.m2:/root/.m2' 
 //         }
 //     }
+    environment {
+        DOCKER_TAG = getDockerTag()
+    }
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "M3"
@@ -59,10 +62,7 @@ pipeline {
                 steps {
                     sh "chmod +x changeTag.sh"
                     sh "./changeTag.sh ${DOCKER_TAG}"
-                    sshagent(['k8s-test']){
-                        // TODO" this
-//                         sh "scp -i StrictHostKeyChecking=no services.yml aws-image-upload-pods.yml k8s-docker-demo-for-josur@34.133.165.254"
-                        script{
+                    script{
                             try{
                                 // TODO: this
                                 sh "kubectl apply -f ."
@@ -71,7 +71,10 @@ pipeline {
                                 sh "kubectl create -f ."
                             }
                         }
-                    }
+//                     sshagent(['k8s-test']){
+                        // TODO" this
+//                         sh "scp -i StrictHostKeyChecking=no services.yml aws-image-upload-pods.yml k8s-docker-demo-for-josur@34.133.165.254"
+//                     }
                 }
             }
         }
@@ -83,4 +86,10 @@ pipeline {
             }
         }
     }
+}
+
+
+def getDockerTag(){
+    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
+    return tag
 }
