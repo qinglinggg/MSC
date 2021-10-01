@@ -8,5 +8,5 @@ CMD ["node", "index.js"]
 
 FROM openjdk:11
 WORKDIR /app
-COPY ./target/aws-image-upload.jar ./artifacts
+COPY ./target/aws-image-upload.jar ./artifacts/aws-image-upload.jar
 CMD ["java","-jar","./artifacts/aws-image-upload.jar"]
