@@ -1,3 +1,10 @@
+def getDockerTag(){
+    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
+    return tag
+}
+
+$DOCKER_TAG = getDockerTag()
+
 pipeline {
     agent any
 //     agent {
