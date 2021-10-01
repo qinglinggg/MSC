@@ -79,6 +79,7 @@ pipeline {
             steps {
                 // Deliver the codes using docker to run a virtual environment of the Application.
 //                 sh './jenkins/scripts/deliver.sh'
+                echo 'Delivering Script'
             }
         }
     }
