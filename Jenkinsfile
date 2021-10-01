@@ -75,11 +75,12 @@ pipeline {
             }
         }
         
-        stage('Deliver') {
+        stage('Check Builds') {
             steps {
                 // Deliver the codes using docker to run a virtual environment of the Application.
 //                 sh './jenkins/scripts/deliver.sh'
-                echo 'Delivering Script'
+                echo "current build number: ${currentBuild.number}"
+                echo "previous build number: ${currentBuild.previousBuild.getNumber()}"
             }
         }
     }
