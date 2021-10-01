@@ -53,7 +53,7 @@ pipeline {
                 sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
                 
                 // docker push
-                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]){
+                withCredentials([string(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPwd')]){
                     sh "docker login -u jsuryadharma -p ${dockerHubPwd}"
                     sh "docker push jsuryadharma:${DOCKER_TAG}"
                 }
