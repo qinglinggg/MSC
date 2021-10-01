@@ -48,21 +48,20 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-//                 sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
+                sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
                 
                 // docker push
-//                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-//                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-//                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
-//                 }
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+                    sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                    sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
+                }
                     sh "chmod +x changeTag.sh"
                     sh "./changeTag.sh version-${currentBuild.number}"
                 script{
                     try{
-                        // TODO: this
+                        // Creating pods and services for Kubernetes, if there are changes then apply it.
                         sh "kubectl apply -f ."
                         } catch(error) {
-                        // TODO: this
                         sh "kubectl create -f ."
                     }
                 }
