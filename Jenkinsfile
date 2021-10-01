@@ -53,11 +53,11 @@ pipeline {
                 sh "docker build . -t jsuryadharma/msc:${DOCKER_TAG}"
                 
                 // docker push
-                withCredentials([string(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPwd')]){
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     sh "docker login -u jsuryadharma -p ${dockerHubPwd}"
                     sh "docker push jsuryadharma:${DOCKER_TAG}"
                 }
-                
+                // [string(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPwd')]
                 // deploy to kubernetes k8s
                 steps {
                     sh "chmod +x changeTag.sh"
