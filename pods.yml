@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
     - name: aws-image-upload
-      image: jsuryadharma/msc:tagVersion
+      image: jsuryadharma/msc:latest
       ports:
         - containerPort: 8080
