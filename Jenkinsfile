@@ -43,8 +43,20 @@ pipeline {
             steps {
                 // build docker image
                 sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
-                sh "docker rmi jsuryadharma/msc:latest"
-                
+                script{
+                    try{
+                        sh "docker rmi jsuryadharma/msc:latest"
+                        echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        echo 'docker for latest version of image is available..'
+                        echo 'removed latest local version of image!'
+                        echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                    }catch(error){
+                        echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        echo 'docker for latest version of image is unavailable..'
+                        echo 'ignoring...'
+                        echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                    }
+                }
                 // docker push
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
