@@ -60,10 +60,22 @@ pipeline {
                 // docker push
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                    sh "docker image pull ${USERNAME}/msc:latest"
+                    script{
+                        try{
+                            sh "docker image pull ${USERNAME}/msc:latest"
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                            echo 'pulled image : latest version successfully!'
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        }catch(error){
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                            echo 'pulling image : latest version failed!'
+                            echo 'continuing...'
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        }
+                    }
                     sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
                     sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
-                    sh "docker -f push ${USERNAME}/msc:latest"
+                    sh "docker push ${USERNAME}/msc:latest"
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
                 
