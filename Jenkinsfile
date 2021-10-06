@@ -63,7 +63,7 @@ pipeline {
                     sh "docker image pull ${USERNAME}/msc:latest"
                     sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
                     sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
-                    sh "docker push ${USERNAME}/msc:latest"
+                    sh "docker -f push ${USERNAME}/msc:latest"
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
                 
