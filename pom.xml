@@ -37,14 +37,12 @@
 	</dependencies>
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
+		<plugins>
+			<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+			</plugin>
+		</plugins>
 		<finalName>aws-image-upload</finalName>
 	</build>
 
