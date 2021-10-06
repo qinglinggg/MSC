@@ -6,7 +6,7 @@ RUN npm install
 EXPOSE 8080
 CMD ["node", "index.js"]
 
-FROM openjdk:11
+FROM adoptopenjdk:11-jre-openj9
 WORKDIR /app
-COPY ./target/aws-image-upload.jar ./artifacts/aws-image-upload.jar
-CMD ["/usr/bin/java","-jar","./artifacts/aws-image-upload.jar"]
+COPY ./target/aws-image-upload.jar ./artifacts/
+CMD ["java","-jar","./artifacts/aws-image-upload.jar"]
