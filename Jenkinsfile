@@ -43,10 +43,15 @@ pipeline {
             steps {
                 // build docker image
                 sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
+                sh "docker rmi jsuryadharma/msc:latest"
                 
                 // docker push
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+                    sh "docker image pull ${USERNAME}/msc:latest"
+                    sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
+                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
+                    sh "docker push ${USERNAME}/msc:latest"
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
                 
