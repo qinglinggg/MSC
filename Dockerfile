@@ -1,10 +1,9 @@
 FROM node:16
-WORKDIR /app
+WORKDIR /core
+ENV PATH='./node_modules/.bin:$PATH'
 COPY ./src/main/frontend .
-RUN curl -v https://registry.npmjs.com/
-RUN npm install
-EXPOSE 8080
-CMD ["node", "index.js"]
+RUN npm run build
+CMD ["npm","start"]
 
 FROM adoptopenjdk:11-jre-openj9
 WORKDIR /app
