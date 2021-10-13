@@ -82,6 +82,7 @@ function App() {
   return (
     <div className="App">
       <UserProfiles/>
+      <p>{`Hello there - synced code ${process.env.REACT_APP_NAME}`}</p>
     </div>
   );
 }
