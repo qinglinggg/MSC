@@ -1,4 +1,4 @@
 FROM openjdk:latest
 WORKDIR /app
-COPY ./target/$APP_NAME ./artifacts/$APP_NAME
-CMD ["java", "-jar", ".artifacts/$APP_NAME"]
+COPY ./target/${APP_NAME} ./artifacts/${APP_NAME}
+CMD ["java", "-jar", ".artifacts/${APP_NAME}"]
