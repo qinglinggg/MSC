@@ -1,6 +1,6 @@
 version: "3"
 services:
-  jsuryadharma/msc:
+  msc:
     build:
       context: .
       dockerfile: Dockerfile.backend
