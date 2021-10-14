@@ -1,6 +1,0 @@
-FROM node:16
-WORKDIR /app
-COPY ./src/main/frontend/package.json .
-RUN npm install
-COPY ./src/main/frontend/ .
-CMD ["npm","start"]
