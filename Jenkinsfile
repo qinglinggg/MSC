@@ -98,8 +98,8 @@ pipeline {
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
                 
-                sh "chmod +x changeTag.sh"
-                sh "./changeTag.sh version-${currentBuild.number}"
+//                 sh "chmod +x changeTag.sh"
+//                 sh "./changeTag.sh version-${currentBuild.number}"
                 
                 script{
                     try{
