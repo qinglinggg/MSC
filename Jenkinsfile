@@ -47,8 +47,8 @@ pipeline {
         stage('Build') {
             
             steps {
-                sh "docker build --file=Dockerfile.frontend -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
-                sh "docker build --file=Dockerfile.backend -t jsuryadharma/msc:version-${currentBuild.number}"
+                sh "docker build . --file=Dockerfile.frontend -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
+                sh "docker build . --file=Dockerfile.backend -t jsuryadharma/msc:version-${currentBuild.number}"
                 
                 script{      
                     try{
