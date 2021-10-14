@@ -71,7 +71,6 @@ pipeline {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                     script{
                         try{
-                            sh "docker image pull ${USERNAME}/msc_dev:latest"
                             sh "docker image pull ${USERNAME}/msc_prod:latest"
                             sh "docker image pull ${USERNAME}/msc:latest"
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
@@ -86,9 +85,18 @@ pipeline {
                     }
                     
                     // docker retagging previous and current build
-                    sh "docker tag ${USERNAME}/msc_frontend:latest ${USERNAME}/msc_frontend:version-${currentBuild.previousBuild.getNumber()}"
-                    sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc_backend:version-${currentBuild.previousBuild.getNumber()}"
-                    
+                    script{
+                        try{
+                            sh "docker tag ${USERNAME}/msc_frontend:latest ${USERNAME}/msc_frontend:version-${currentBuild.previousBuild.getNumber()}"
+                            sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc_backend:version-${currentBuild.previousBuild.getNumber()}"
+                        } catch(error){
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                            echo 'Image tagging from previous version failed!'
+                            echo 'continuing...'
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        }
+                    }
+
                     sh "docker tag ${USERNAME}/msc_frontend:version-${currentBuild.number} ${USERNAME}/msc_frontend:latest"
                     sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc_backend:latest"
                     
