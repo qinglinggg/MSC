@@ -71,7 +71,7 @@ pipeline {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                     script{
                         try{
-                            sh "docker image pull ${USERNAME}/msc_prod:latest"
+                            sh "docker image pull ${USERNAME}/msc_frontend:latest"
                             sh "docker image pull ${USERNAME}/msc:latest"
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                             echo 'pulled image : latest version successfully!'
@@ -98,7 +98,7 @@ pipeline {
                     }
 
                     sh "docker tag ${USERNAME}/msc_frontend:version-${currentBuild.number} ${USERNAME}/msc_frontend:latest"
-                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc_backend:latest"
+                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
                     
                     // docker hub push
                     sh "docker push ${USERNAME}/msc_frontend:latest"
