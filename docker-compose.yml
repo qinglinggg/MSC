@@ -1,9 +1,17 @@
 version: "3"
 services:
-  msc:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+  msc_frontend:
+    image: jsuryadharma/msc_frontend:latest
+    container_name: msc_frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+  msc_backend:
+    image: jsuryadharma/msc:latest
+    container_name: msc
+    depends_on:
+      - msc_frontend
     ports:
       - "8080:8080"
     env_file:
