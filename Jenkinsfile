@@ -129,15 +129,15 @@ pipeline {
                         // Convert docker compose for Kubernetes config files
                         sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
                         // Creating pods and services for Kubernetes, if there are changes then apply it.
-                        sh "kubectl apply -f frontend-service-deployment.yaml"
-                        sh "kubectl apply -f frontend-service-service.yaml"
-                        sh "kubectl apply -f backend-service-deployment.yaml"
-                        sh "kubectl apply -f backend-service-service.yaml"
+                        sh "kubectl apply -f jsuryadharma/msc_frontend-deployment.yaml"
+                        sh "kubectl apply -f jsuryadharma/msc_frontend-service.yaml"
+                        sh "kubectl apply -f jsuryadharma/msc-deployment.yaml"
+                        sh "kubectl apply -f jsuryadharma/msc-service.yaml"
                     } catch(error) {
-                        sh "kubectl create -f frontend-service-deployment.yaml"
-                        sh "kubectl create -f frontend-service-service.yaml"
-                        sh "kubectl create -f backend-service-deployment.yaml"
-                        sh "kubectl create -f backend-service-service.yaml"
+                        sh "kubectl create -f jsuryadharma/msc_frontend-deployment.yaml"
+                        sh "kubectl create -f jsuryadharma/msc_frontend-service.yaml"
+                        sh "kubectl create -f jsuryadharma/msc-deployment.yaml"
+                        sh "kubectl create -f jsuryadharma/msc-service.yaml"
                     }
                 }
             }
