@@ -103,7 +103,7 @@ pipeline {
                 script{
                     try{
                         // Check then download Kompose
-                        if(cd '/usr/local/bin/' | grep "kompose" == ''){
+                        if(sh 'cd '/usr/local/bin/' | grep "kompose"' == ''){
                             echo 'Downloading and Installing compose to system...'
                             sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
                             sh "chmod +x kompose"
