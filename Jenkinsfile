@@ -126,9 +126,9 @@ pipeline {
             steps {
                 script{
                     try{
-                        sh "sudo chown root:jenkins /run/docker.sock"
                         // Fixing Permission Issues
                         echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+                        sh "sudo chown root:jenkins /run/docker.sock"
                         // Check then download Kompose
                         echo 'Downloading and Installing compose to system...'
                         sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
@@ -137,9 +137,9 @@ pipeline {
                         // Convert docker compose for Kubernetes config files
                         sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
                         // Creating pods and services for Kubernetes, if there are changes then apply it.
-                        sh "kubectl apply -f ."
+                        sh "kubectl apply -f . --validate=false"
                     } catch(error) {
-                        sh "kubectl create -f ."
+                        sh "kubectl create -f . --validate=false"
                     }
                 }
             }
