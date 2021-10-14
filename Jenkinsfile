@@ -126,14 +126,6 @@ pipeline {
             steps {
                 script{
                     try{
-                        // Fixing Permission Issues
-                        echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-                        sh "sudo chown root:jenkins /run/docker.sock"
-                        // Check then download Kompose
-                        echo 'Downloading and Installing compose to system...'
-                        sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
-                        sh "chmod +x kompose"
-                        sh "sudo mv ./kompose /usr/local/bin/kompose"
                         // Convert docker compose for Kubernetes config files
                         sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
                         // Creating pods and services for Kubernetes, if there are changes then apply it.
