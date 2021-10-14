@@ -42,9 +42,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 // build docker image
-                sh "docker build . -t jsuryadharma/msc:version-${currentBuild.number}"
+                sh "docker build --file=Dockerfile.dev -t jsuryadharma/msc_dev:version-${currentBuild.number}"
+                sh "docker build --file=Dockerfile.prod -t jsuryadharma/msc_prod:version-${currentBuild.number}"
+                sh "docker build --file=Dockerfile.backend -t jsuryadharma/msc:version-${currentBuild.number}"
                 script{
                     try{
+                        sh "docker rmi jsuryadharma/msc_dev:latest"
+                        sh "docker rmi jsuryadharma/msc_prod:latest"
                         sh "docker rmi jsuryadharma/msc:latest"
                         echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                         echo 'docker for latest version of image is available..'
@@ -62,6 +66,8 @@ pipeline {
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
                     script{
                         try{
+                            sh "docker image pull ${USERNAME}/msc_dev:latest"
+                            sh "docker image pull ${USERNAME}/msc_prod:latest"
                             sh "docker image pull ${USERNAME}/msc:latest"
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                             echo 'pulled image : latest version successfully!'
@@ -73,9 +79,22 @@ pipeline {
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                         }
                     }
-                    sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
-                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
+                    // docker retagging previous and current build
+                    sh "docker tag ${USERNAME}/msc_dev:latest ${USERNAME}/msc_dev:version-${currentBuild.previousBuild.getNumber()}"
+                    sh "docker tag ${USERNAME}/msc_prod:latest ${USERNAME}/msc_prod:version-${currentBuild.previousBuild.getNumber()}"
+                    sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc_backend:version-${currentBuild.previousBuild.getNumber()}"
+                    
+                    sh "docker tag ${USERNAME}/msc_dev:version-${currentBuild.number} ${USERNAME}/msc_dev:latest"
+                    sh "docker tag ${USERNAME}/msc_prod:version-${currentBuild.number} ${USERNAME}/msc_prod:latest"
+                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc_backend:latest"
+                    
+                    // docker hub push
+                    sh "docker push ${USERNAME}/msc_dev:latest"
+                    sh "docker push ${USERNAME}/msc_prod:latest"
                     sh "docker push ${USERNAME}/msc:latest"
+                    
+                    sh "docker push ${USERNAME}/msc_dev:version-${currentBuild.number}"
+                    sh "docker push ${USERNAME}/msc_prod:version-${currentBuild.number}"
                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                 }
                 
