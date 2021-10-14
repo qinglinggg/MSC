@@ -9,14 +9,17 @@ pipeline {
     stages {
         
         stage('Compile') {
+            
             steps {
                 git branch: 'main', url: 'https://github.com/qinglinggg/MSC.git'
                 // clean the target forder, so only the newer components + artifacts will be released.
                 sh "mvn clean compile"
             }
+            
         }
         
         stage('Test') { 
+            
             steps {
                 sh 'mvn test'
             }
@@ -26,6 +29,7 @@ pipeline {
                     junit '**/target/surefire-reports/TEST-*.xml'
                 }
             }
+            
         }
         
         stage('Package') {
@@ -41,6 +45,7 @@ pipeline {
         }
         
         stage('Build') {
+            
             steps {
                 sh "docker build --file=Dockerfile.frontend -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
                 sh "docker build --file=Dockerfile.backend -t jsuryadharma/msc:version-${currentBuild.number}"
@@ -99,32 +104,38 @@ pipeline {
 //                  sh "./changeTag.sh version-${currentBuild.number}"
                 }
             }
+            
         }
              
-        stage('Deploy') {                 
+        stage('Deploy') {
             
-            script{
-                try{
-                    // Check then download Kompose
-                    echo 'Downloading and Installing compose to system...'
-                    sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
-                    sh "chmod +x kompose"
-                    sh "sudo mv ./kompose /usr/local/bin/kompose"
-                    // Convert docker compose for Kubernetes config files
-                    sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
-                    // Creating pods and services for Kubernetes, if there are changes then apply it.
-                    sh "kubectl apply -f ."
-                } catch(error) {
-                    sh "kubectl create -f ."
+            steps {
+                script{
+                    try{
+                        // Check then download Kompose
+                        echo 'Downloading and Installing compose to system...'
+                        sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
+                        sh "chmod +x kompose"
+                        sh "sudo mv ./kompose /usr/local/bin/kompose"
+                        // Convert docker compose for Kubernetes config files
+                        sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
+                        // Creating pods and services for Kubernetes, if there are changes then apply it.
+                        sh "kubectl apply -f ."
+                    } catch(error) {
+                        sh "kubectl create -f ."
+                    }
                 }
             }
+            
         }
         
         stage('Check Builds') {
+            
             steps {
                 echo "current build number: ${currentBuild.number}"
                 echo "previous build number: ${currentBuild.previousBuild.getNumber()}"
             }
+            
         }
         
     }
