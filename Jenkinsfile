@@ -88,7 +88,7 @@ pipeline {
                     script{
                         try{
                             sh "docker tag ${USERNAME}/msc_frontend:latest ${USERNAME}/msc_frontend:version-${currentBuild.previousBuild.getNumber()}"
-                            sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc_backend:version-${currentBuild.previousBuild.getNumber()}"
+                            sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
                         } catch(error){
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                             echo 'Image tagging from previous version failed!'
