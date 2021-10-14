@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+        
         stage('Compile') {
             steps {
                 git branch: 'main', url: 'https://github.com/qinglinggg/MSC.git'
@@ -38,9 +39,10 @@ pipeline {
                 }
             }
         }
+        
         stage('Build') {
             steps {
-                sh "docker build --file=Dockerfile.prod -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
+                sh "docker build --file=Dockerfile.frontend -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
                 sh "docker build --file=Dockerfile.backend -t jsuryadharma/msc:version-${currentBuild.number}"
                 
                 script{      
@@ -96,6 +98,7 @@ pipeline {
 //                  sh "chmod +x changeTag.sh"
 //                  sh "./changeTag.sh version-${currentBuild.number}"
                 }
+            }
         }
              
         stage('Deploy') {                 
