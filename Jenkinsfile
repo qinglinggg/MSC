@@ -102,6 +102,18 @@ pipeline {
             
                 script{
                     try{
+                        // Check then download Kompose
+                        if(cd '/usr/local/bin/' | grep "kompose" == ''){
+                            echo 'Downloading and Installing compose to system...'
+                            sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
+                            sh "chmod +x kompose"
+                            sh "sudo mv ./kompose /usr/local/bin/kompose"
+                        } else {
+                            echo "Kompose installation detected! Skipping download.."
+                        }
+                        
+                        // Convert docker compose for Kubernetes config files
+                        sh "kompose convert -f docker-compose.yml -f docker-compose-frontend.yml"
                         // Creating pods and services for Kubernetes, if there are changes then apply it.
                         sh "kubectl apply -f ."
                         } catch(error) {
