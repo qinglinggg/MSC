@@ -69,63 +69,66 @@ pipeline {
             
         }
         
-        stage('Upload to Registry'){
+//         stage('Upload to Registry'){
         
-            steps {              
-                // docker push
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-                    sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-                    script{
-                        try{
-                            sh "docker image pull ${USERNAME}/msc_frontend:latest"
-                            sh "docker image pull ${USERNAME}/msc:latest"
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                            echo 'pulled image : latest version successfully!'
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                        }catch(error){
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                            echo 'pulling image : latest version failed!'
-                            echo 'continuing...'
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                        }
-                    }
+//             steps {              
+//                 // docker push
+//                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+//                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+//                     script{
+//                         try{
+//                             sh "docker image pull ${USERNAME}/msc_frontend:latest"
+//                             sh "docker image pull ${USERNAME}/msc:latest"
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                             echo 'pulled image : latest version successfully!'
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                         }catch(error){
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                             echo 'pulling image : latest version failed!'
+//                             echo 'continuing...'
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                         }
+//                     }
                     
-                    // docker retagging previous and current build
-                    script{
-                        try{
-                            sh "docker tag ${USERNAME}/msc_frontend:latest ${USERNAME}/msc_frontend:version-${currentBuild.previousBuild.getNumber()}"
-                            sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
-                        } catch(error){
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                            echo 'Image tagging from previous version failed!'
-                            echo 'continuing...'
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                        }
-                    }
+//                     // docker retagging previous and current build
+//                     script{
+//                         try{
+//                             sh "docker tag ${USERNAME}/msc_frontend:latest ${USERNAME}/msc_frontend:version-${currentBuild.previousBuild.getNumber()}"
+//                             sh "docker tag ${USERNAME}/msc:latest ${USERNAME}/msc:version-${currentBuild.previousBuild.getNumber()}"
+//                         } catch(error){
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                             echo 'Image tagging from previous version failed!'
+//                             echo 'continuing...'
+//                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+//                         }
+//                     }
 
-                    sh "docker tag ${USERNAME}/msc_frontend:version-${currentBuild.number} ${USERNAME}/msc_frontend:latest"
-                    sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
+//                     sh "docker tag ${USERNAME}/msc_frontend:version-${currentBuild.number} ${USERNAME}/msc_frontend:latest"
+//                     sh "docker tag ${USERNAME}/msc:version-${currentBuild.number} ${USERNAME}/msc:latest"
                     
-                    // docker hub push
-                    sh "docker push ${USERNAME}/msc_frontend:latest"
-                    sh "docker push ${USERNAME}/msc:latest"
+//                     // docker hub push
+//                     sh "docker push ${USERNAME}/msc_frontend:latest"
+//                     sh "docker push ${USERNAME}/msc:latest"
                     
-                    sh "docker push ${USERNAME}/msc_frontend:version-${currentBuild.number}"
-                    sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
+//                     sh "docker push ${USERNAME}/msc_frontend:version-${currentBuild.number}"
+//                     sh "docker push ${USERNAME}/msc:version-${currentBuild.number}"
                     
                     
-//                  sh "chmod +x changeTag.sh"
-//                  sh "./changeTag.sh version-${currentBuild.number}"
-                }
-            }
+// //                  sh "chmod +x changeTag.sh"
+// //                  sh "./changeTag.sh version-${currentBuild.number}"
+//                 }
+//             }
         
-        }
+//         }
              
         stage('Deploy') {
             
             steps {
                 script{
                     try{
+                        sh "sudo chown root:jenkins /run/docker.sock"
+                        // Fixing Permission Issues
+                        echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
                         // Check then download Kompose
                         echo 'Downloading and Installing compose to system...'
                         sh "curl -L https://github.com/kubernetes/kompose/releases/download/v1.24.0/kompose-darwin-amd64 -o kompose"
