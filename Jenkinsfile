@@ -65,7 +65,13 @@ pipeline {
                         echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                     }
                 }
-                
+            }
+            
+        }
+        
+        stage('Upload to Registry'){
+        
+            steps {              
                 // docker push
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     sh "docker login -u ${USERNAME} -p ${PASSWORD}"
@@ -112,7 +118,7 @@ pipeline {
 //                  sh "./changeTag.sh version-${currentBuild.number}"
                 }
             }
-            
+        
         }
              
         stage('Deploy') {
