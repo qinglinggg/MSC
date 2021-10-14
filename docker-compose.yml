@@ -1,9 +1,6 @@
 version: "3"
 services:
-  backend-service:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+  jsuryadharma/msc:
     ports:
       - "8080:8080"
     env_file:
