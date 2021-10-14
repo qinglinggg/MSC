@@ -134,7 +134,10 @@ pipeline {
                         sh "kubectl apply -f msc_backend_deployment.yaml"
                         sh "kubectl apply -f msc_backend_serivce.yaml"
                     } catch(error) {
-                        sh "kubectl create -f ."
+                        sh "kubectl create -f msc_frontend_deployment.yaml"
+                        sh "kubectl create -f msc_frontend_service.yaml"
+                        sh "kubectl create -f msc_backend_deployment.yaml"
+                        sh "kubectl create -f msc_backend_serivce.yaml"
                     }
                 }
             }
