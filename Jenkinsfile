@@ -8,7 +8,7 @@ pipeline {
 
     stages {
         
-        stage('Compile') {
+        stage('Maven - Compile') {
             
             steps {
                 git branch: 'main', url: 'https://github.com/qinglinggg/MSC.git'
@@ -18,7 +18,7 @@ pipeline {
             
         }
         
-        stage('Test') { 
+        stage('Maven - Test') { 
             
             steps {
                 sh 'mvn test'
@@ -32,7 +32,7 @@ pipeline {
             
         }
         
-        stage('Package') {
+        stage('Maven - Package') {
             steps {
                 sh 'mvn package'
             }
@@ -44,7 +44,7 @@ pipeline {
             }
         }
         
-        stage('Build') {
+        stage('Docker - Image Build') {
             
             steps {
                 sh "docker build . --file=Dockerfile.frontend -t jsuryadharma/msc_frontend:version-${currentBuild.number}"
@@ -69,7 +69,7 @@ pipeline {
             
         }
         
-        stage('Upload to Registry'){
+        stage('Docker - Upload to Registry'){
         
             steps {              
                 // docker push
@@ -121,7 +121,7 @@ pipeline {
         
         }
              
-        stage('Deploy') {
+        stage('Kube - Deploy') {
             
             steps {
                 script{
@@ -146,7 +146,7 @@ pipeline {
             
         }
         
-        stage('Check Builds') {
+        stage('Summary - Check Builds') {
             
             steps {
                 echo "current build number: ${currentBuild.number}"
