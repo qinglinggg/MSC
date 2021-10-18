@@ -1,5 +1,5 @@
 FROM openjdk:latest
 WORKDIR /app
-ENV APP_NAME
+ARG APP_NAME
 COPY ./target/${APP_NAME} ./artifacts/${APP_NAME}
 CMD ["java", "-jar", ".artifacts/${APP_NAME}"]
