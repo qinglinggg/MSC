@@ -126,7 +126,7 @@ pipeline {
             steps {
                 script{
                     try{
-                        sh "docker compose up -f docker-compose.yml"
+                        sh "docker-compose -f docker-compose.yml -f docker-compose-prod.yml up -d"
                     } catch(error) {
                             echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                             echo 'Deploying to docker compose failed!'
