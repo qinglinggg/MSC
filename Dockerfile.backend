@@ -2,4 +2,4 @@ FROM openjdk:latest
 WORKDIR /app
 ARG APP_NAME
 COPY ./target/aws-image-upload.jar ./artifacts/aws-image-upload.jar
-CMD ["java", "-jar", "./artifacts/$aws-image-upload.jar"]
+CMD ["java", "-jar", "./artifacts/aws-image-upload.jar"]
