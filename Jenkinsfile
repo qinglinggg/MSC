@@ -121,7 +121,7 @@ pipeline {
         
         }
              
-        stage('Kube - Deploy') {
+        stage('Docker - Deployment') {
             
             steps {
                 script{
