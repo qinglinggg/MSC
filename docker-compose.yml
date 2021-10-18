@@ -4,7 +4,7 @@ services:
     image: jsuryadharma/msc_frontend:latest
     container_name: msc_frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
   msc_backend:
     image: jsuryadharma/msc:latest
     container_name: msc
