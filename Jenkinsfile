@@ -18,19 +18,19 @@ pipeline {
             
         }
         
-        stage('Maven - Test') { 
+//         stage('Maven - Test') { 
             
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    // Generates the Test Results, using the Maven for the Unit Testing, and show the results by JUnit.
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                }
-            }
+//             steps {
+//                 sh 'mvn test'
+//             }
+//             post {
+//                 always {
+//                     // Generates the Test Results, using the Maven for the Unit Testing, and show the results by JUnit.
+//                     junit '**/target/surefire-reports/TEST-*.xml'
+//                 }
+//             }
             
-        }
+//         }
         
         stage('Maven - Package') {
             steps {
