@@ -128,10 +128,8 @@ pipeline {
                     try{
                         sh "docker-compose -f docker-compose.yml up -d"
                     } catch(error) {
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
-                            echo 'Deploying to docker compose failed!'
-                            echo 'continuing...'
-                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                        sh "docker-compose -f docker-compose.yml down"
+                        sh "docker-compose -f docker-compose.yml up -d"
                     }
                 }
             }
