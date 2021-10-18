@@ -12,5 +12,3 @@ services:
       - msc_frontend
     ports:
       - "8080:8080"
-    args:
-      - APP_NAME: aws-image-upload.jar
