@@ -126,20 +126,12 @@ pipeline {
             steps {
                 script{
                     try{
-                        // Convert docker compose for Kubernetes config files
-                        sh "kompose convert -f docker-compose.yml"
-                        // Creating pods and services for Kubernetes, if there are changes then apply it.
-                        sh "kubectl apply -f msc-frontend-deployment.yaml"
-                        sh "kubectl apply -f msc-frontend-service.yaml"
-                        sh "kubectl apply -f msc-backend-deployment.yaml"
-                        sh "kubectl apply -f msc-backend-service.yaml"
-                        sh "kubectl apply -f env-configmap.yaml"
+                        sh "docker compose up -f docker-compose.yml"
                     } catch(error) {
-                        sh "kubectl create -f msc-frontend-deployment.yaml"
-                        sh "kubectl create -f msc-frontend-service.yaml"
-                        sh "kubectl create -f msc-backend-deployment.yaml"
-                        sh "kubectl create -f msc-backend-service.yaml"
-                        sh "kubectl apply -f env-configmap.yaml"
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
+                            echo 'Deploying to docker compose failed!'
+                            echo 'continuing...'
+                            echo '+++++++++++++++++++++++++++++++++++++++++++++++++++'
                     }
                 }
             }
